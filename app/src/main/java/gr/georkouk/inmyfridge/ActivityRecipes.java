@@ -68,7 +68,7 @@ public class ActivityRecipes extends AppCompatActivity {
 
         Map<String, String> data = new HashMap<>();
         data.put("includeIngredients", ingredients);
-        data.put("number", "10");
+        data.put("number", "50");
         data.put("offset", "0");
         data.put("ranking", "2");
 

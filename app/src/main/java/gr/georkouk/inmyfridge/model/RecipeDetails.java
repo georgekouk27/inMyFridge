@@ -33,6 +33,10 @@ public class RecipeDetails {
     @SerializedName("analyzedInstructions")
     private List<Instruction> instructions;
 
+    @SerializedName("nutrition")
+    private Nutrition nutrition;
+
+
     public RecipeDetails() {
     }
 
@@ -106,6 +110,14 @@ public class RecipeDetails {
 
     public void setInstructions(List<Instruction> instructions) {
         this.instructions = instructions;
+    }
+
+    public Nutrition getNutrition() {
+        return nutrition;
+    }
+
+    public void setNutrition(Nutrition nutrition) {
+        this.nutrition = nutrition;
     }
 
 }

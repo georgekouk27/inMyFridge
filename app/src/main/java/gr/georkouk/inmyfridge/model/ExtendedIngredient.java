@@ -13,6 +13,12 @@ public class ExtendedIngredient {
     @SerializedName("originalString")
     private String originalString;
 
+    @SerializedName("amount")
+    private double amount;
+
+    @SerializedName("unit")
+    private String unit;
+
 
     public ExtendedIngredient() {
     }
@@ -39,6 +45,22 @@ public class ExtendedIngredient {
 
     public void setOriginalString(String originalString) {
         this.originalString = originalString;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
 }
