@@ -38,13 +38,17 @@ public class ActivityRecipes extends AppCompatActivity {
 
         if(getIntent().getExtras() != null){
             String ingredients = getIntent().getExtras().getString("ingredients", "");
+            String cuisine = getIntent().getExtras().getString("cuisine", "");
+            String diet = getIntent().getExtras().getString("diet", "");
+            String mealType = getIntent().getExtras().getString("mealType", "");
+            String intolerances = getIntent().getExtras().getString("intolerances", "");
 
-            initializeView(ingredients);
+            initializeView(ingredients, cuisine, diet, mealType, intolerances);
         }
 
     }
 
-    private void initializeView(String ingredients){
+    private void initializeView(String ingredients, String cuisine, String diet, String mealType, String intolerances){
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         this.recipesRecAdapter = new RecipesRecAdapter(this);
@@ -68,6 +72,10 @@ public class ActivityRecipes extends AppCompatActivity {
 
         Map<String, String> data = new HashMap<>();
         data.put("includeIngredients", ingredients);
+        data.put("cuisine", cuisine);
+        data.put("diet", diet);
+        data.put("type", mealType);
+        data.put("intolerances", intolerances);
         data.put("number", "50");
         data.put("offset", "0");
         data.put("ranking", "2");
