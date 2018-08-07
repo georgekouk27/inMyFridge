@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -48,6 +49,10 @@ public class ActivityIngredients extends AppCompatActivity {
     LinearLayout layoutIntolerances;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.etMinCalories)
+    EditText etMinCalories;
+    @BindView(R.id.etMaxCalories)
+    EditText etMaxCalories;
     private Toolbar toolbar;
     private IngredientsRecAdapter ingredientsRecAdapter;
     private FirebaseDatabase database;
@@ -180,6 +185,9 @@ public class ActivityIngredients extends AppCompatActivity {
                 else{
                     intent.putExtra("intolerances", "");
                 }
+
+                intent.putExtra("minCalories", etMinCalories.getText().toString());
+                intent.putExtra("maxCalories", etMaxCalories.getText().toString());
 
                 startActivity(intent);
             }

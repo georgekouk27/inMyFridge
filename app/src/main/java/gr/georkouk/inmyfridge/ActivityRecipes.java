@@ -45,13 +45,17 @@ public class ActivityRecipes extends AppCompatActivity {
             String diet = getIntent().getExtras().getString("diet", "");
             String mealType = getIntent().getExtras().getString("mealType", "");
             String intolerances = getIntent().getExtras().getString("intolerances", "");
+            String minCalories = getIntent().getExtras().getString("minCalories", "");
+            String maxCalories = getIntent().getExtras().getString("maxCalories", "");
 
-            initializeView(ingredients, cuisine, diet, mealType, intolerances);
+            initializeView(ingredients, cuisine, diet, mealType, intolerances, minCalories, maxCalories);
         }
 
     }
 
-    private void initializeView(String ingredients, String cuisine, String diet, String mealType, String intolerances){
+    private void initializeView(String ingredients, String cuisine, String diet, String mealType,
+                                String intolerances, String minCalories, String maxCalories){
+
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         this.recipesRecAdapter = new RecipesRecAdapter(this);
@@ -82,6 +86,14 @@ public class ActivityRecipes extends AppCompatActivity {
         data.put("number", "50");
         data.put("offset", "0");
         data.put("ranking", "2");
+
+        if(!minCalories.equals("")){
+            data.put("minCalories", minCalories);
+        }
+
+        if(!maxCalories.equals("")){
+            data.put("maxCalories", maxCalories);
+        }
 
         InterfaceApi interfaceApi = RestClient.getClient().create(InterfaceApi.class);
 
