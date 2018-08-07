@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class ActivityRecipes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         ButterKnife.bind(this);
 

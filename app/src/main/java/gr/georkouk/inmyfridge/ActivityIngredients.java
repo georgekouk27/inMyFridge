@@ -48,6 +48,7 @@ public class ActivityIngredients extends AppCompatActivity {
     LinearLayout layoutIntolerances;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    private Toolbar toolbar;
     private IngredientsRecAdapter ingredientsRecAdapter;
     private FirebaseDatabase database;
     private DatabaseReference ingredientsRef;
@@ -62,6 +63,9 @@ public class ActivityIngredients extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
         initializeView();
@@ -87,19 +91,6 @@ public class ActivityIngredients extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.app_name,
-                R.string.app_name
-        );
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
     }
 
     @Override
@@ -113,6 +104,17 @@ public class ActivityIngredients extends AppCompatActivity {
     }
 
     private void initializeView(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,
+                drawer,
+                toolbar,
+                R.string.app_name,
+                R.string.app_name
+        );
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         this.ingredientsRecAdapter = new IngredientsRecAdapter(this);

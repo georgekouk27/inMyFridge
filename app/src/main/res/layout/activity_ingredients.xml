@@ -74,7 +74,7 @@
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/cardview_light_background"
+        android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
         <include layout="@layout/search_options" />
