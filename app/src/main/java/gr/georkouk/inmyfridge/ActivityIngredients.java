@@ -2,7 +2,9 @@ package gr.georkouk.inmyfridge;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,10 +55,12 @@ public class ActivityIngredients extends AppCompatActivity {
     EditText etMinCalories;
     @BindView(R.id.etMaxCalories)
     EditText etMaxCalories;
+    @BindView(R.id.layoutProgress)
+    ConstraintLayout layoutProgress;
+    @BindView(R.id.activity_main_root)
+    ConstraintLayout layoutIngredients;
     private Toolbar toolbar;
     private IngredientsRecAdapter ingredientsRecAdapter;
-    private FirebaseDatabase database;
-    private DatabaseReference ingredientsRef;
     private List<DrawerItem> mainIngredientsDrawer;
     private List<DrawerItem> cuisineDrawer;
     private List<DrawerItem> dietDrawer;
@@ -75,10 +79,12 @@ public class ActivityIngredients extends AppCompatActivity {
         ButterKnife.bind(this);
         initializeView();
 
-        this.database = FirebaseDatabase.getInstance();
-        this.ingredientsRef = this.database.getReference("ingredients");
+        final long tStart = System.currentTimeMillis();
 
-        this.ingredientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ingredientsRef = database.getReference("ingredients");
+
+        ingredientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Ingredient> ingredientList = new ArrayList<>();
@@ -88,6 +94,31 @@ public class ActivityIngredients extends AppCompatActivity {
                 }
 
                 ingredientsRecAdapter.swapData(ingredientList);
+
+                long tEnd = System.currentTimeMillis();
+                long tDelta = tEnd - tStart;
+                double elapsedSeconds = tDelta / 1000.0;
+
+                if(elapsedSeconds < 3){
+                    long time = (long) ((3 - elapsedSeconds) * 1000);
+
+                    new CountDownTimer(time, 100) {
+
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        public void onFinish() {
+                            layoutProgress.setVisibility(View.GONE);
+                            layoutIngredients.setVisibility(View.VISIBLE);
+                        }
+
+                    }.start();
+                }
+                else {
+                    layoutProgress.setVisibility(View.GONE);
+                    layoutIngredients.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -133,6 +164,8 @@ public class ActivityIngredients extends AppCompatActivity {
 
                 List<Ingredient> ingredients = ingredientsRecAdapter.getSelectedIngredients();
 
+                ingredientsRecAdapter.resetSelection();
+
                 StringBuilder ingredientsStr = new StringBuilder();
 
                 for(Ingredient ingredient : ingredients){
@@ -146,7 +179,12 @@ public class ActivityIngredients extends AppCompatActivity {
                     ingredientsStr.append(mainIngredient).append(",");
                 }
 
-                intent.putExtra("ingredients", ingredientsStr.substring(0, ingredientsStr.length() - 1));
+                if(ingredientsStr.length() > 1) {
+                    intent.putExtra("ingredients", ingredientsStr.substring(0, ingredientsStr.length() - 1));
+                }
+                else{
+                    intent.putExtra("ingredients", "");
+                }
 
                 String cuisine = "";
                 if(spCuisine.getSelectedItemPosition() > 0){
@@ -192,7 +230,6 @@ public class ActivityIngredients extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         mainIngredientsDrawer = new ArrayList<>();
         mainIngredientsDrawer.add(new DrawerItem("chicken", "Chicken"));

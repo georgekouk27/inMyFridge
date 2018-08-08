@@ -86,6 +86,14 @@ public class IngredientsRecAdapter extends RecyclerView.Adapter<IngredientsRecAd
         notifyDataSetChanged();
     }
 
+    public void resetSelection(){
+        for(Ingredient ingredient : ingredients){
+            ingredient.setSelected(false);
+        }
+
+        notifyDataSetChanged();
+    }
+
     public List<Ingredient> getSelectedIngredients(){
         List<Ingredient> selected = new ArrayList<>();
 

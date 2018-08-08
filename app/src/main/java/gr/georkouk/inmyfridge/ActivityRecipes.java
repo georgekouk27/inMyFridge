@@ -78,7 +78,6 @@ public class ActivityRecipes extends AppCompatActivity {
         progressDialog.show();
 
         Map<String, String> data = new HashMap<>();
-        data.put("includeIngredients", ingredients);
         data.put("cuisine", cuisine);
         data.put("diet", diet);
         data.put("type", mealType);
@@ -86,6 +85,10 @@ public class ActivityRecipes extends AppCompatActivity {
         data.put("number", "50");
         data.put("offset", "0");
         data.put("ranking", "2");
+
+        if(!ingredients.equals("")){
+            data.put("includeIngredients", ingredients);
+        }
 
         if(!minCalories.equals("")){
             data.put("minCalories", minCalories);
@@ -103,6 +106,15 @@ public class ActivityRecipes extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<ResponseRecipes> call, @NonNull Response<ResponseRecipes> response) {
                 progressDialog.dismiss();
+
+                if(response.body() == null
+                        || response.body().getRecipes() == null
+                        || response.body().getRecipes().size() == 0){
+
+                    Toast.makeText(ActivityRecipes.this, "Recipes not found", Toast.LENGTH_SHORT).show();
+
+                    finish();
+                }
 
                 recipesRecAdapter.swapData(response.body().getRecipes());
             }
