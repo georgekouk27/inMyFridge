@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gr.georkouk.inmyfridge.interfaces.InterfaceApi;
@@ -68,6 +69,7 @@ public class ActivityRecipeDetails extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_details);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setTitle(R.string.recipeDetails);
 
         ButterKnife.bind(this);
 
@@ -149,8 +151,8 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .dontTransform()
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher);
+                .placeholder(R.drawable.food)
+                .error(R.drawable.food);
 
         Glide.with(this)
                 .load(recipe.getImageUrl())
@@ -166,9 +168,12 @@ public class ActivityRecipeDetails extends AppCompatActivity {
             linearLayout.setPadding(0, 8, 0, 0);
 
             TextView tvAmount = new TextView(this);
-            tvAmount.setText(String.valueOf(ingredient.getAmount()));
+
+            tvAmount.setText(
+                    String.format(Locale.ROOT,"%.2f", ingredient.getAmount())
+            );
             tvAmount.setLayoutParams(new LinearLayout.LayoutParams(
-                    150,
+                    200,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             ));
             tvAmount.setTypeface(Typeface.DEFAULT_BOLD);

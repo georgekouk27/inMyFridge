@@ -36,6 +36,7 @@ public class ActivityRecipes extends AppCompatActivity {
         setContentView(R.layout.activity_recipes);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setTitle(R.string.recipes);
 
         ButterKnife.bind(this);
 

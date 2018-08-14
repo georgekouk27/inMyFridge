@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">In My Fridge</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+    <string name="recipes">Recipes</string>
+    <string name="recipeDetails">Recipe Details</string>
 
 
 

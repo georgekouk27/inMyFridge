@@ -50,8 +50,8 @@ public class IngredientsRecAdapter extends RecyclerView.Adapter<IngredientsRecAd
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .dontTransform()
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher);
+                .placeholder(R.drawable.food)
+                .error(R.drawable.food);
 
         Glide.with(context)
                 .load(ingredient.getImageUrl())
@@ -68,7 +68,7 @@ public class IngredientsRecAdapter extends RecyclerView.Adapter<IngredientsRecAd
         });
 
         if(ingredient.isSelected()){
-            holder.view.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            holder.view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryLight));
         }
         else{
             holder.view.setBackgroundColor(Color.WHITE);
