@@ -20,6 +20,28 @@
         </activity>
         <activity android:name=".ActivityRecipes" />
         <activity android:name=".ActivityRecipeDetails" />
+
+        <receiver android:name=".widget.RecipeAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_app_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.RecipeAppWidgetUpdateService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="gr.georkouk.inmyfridge.update_app_widget_list"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".widget.RecipeAppWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

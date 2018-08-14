@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">In My Fridge</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+
+
+    <string-array name="mainIngredientsArray">
+        <item>Chicken</item>
+        <item>Turkey</item>
+        <item>Beef</item>
+        <item>Pork</item>
+        <item>Vegetables</item>
+        <item>Beans</item>
+        <item>Fruit</item>
+        <item>Eggs</item>
+        <item>Fish</item>
+        <item>Rice</item>
+        <item>Cheece</item>
+    </string-array>
+
 </resources>

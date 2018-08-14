@@ -231,23 +231,16 @@ public class ActivityIngredients extends AppCompatActivity {
             }
         });
 
-        mainIngredientsDrawer = new ArrayList<>();
-        mainIngredientsDrawer.add(new DrawerItem("chicken", "Chicken"));
-        mainIngredientsDrawer.add(new DrawerItem("turkey", "Turkey"));
-        mainIngredientsDrawer.add(new DrawerItem("vegetables", "Vegetables"));
-        mainIngredientsDrawer.add(new DrawerItem("beef", "Beef"));
-        mainIngredientsDrawer.add(new DrawerItem("fork", "Pork"));
-        mainIngredientsDrawer.add(new DrawerItem("beans", "Beans"));
-        mainIngredientsDrawer.add(new DrawerItem("fruit", "Fruit"));
-        mainIngredientsDrawer.add(new DrawerItem("eggs", "Eggs"));
-        mainIngredientsDrawer.add(new DrawerItem("fish", "Fish"));
-        mainIngredientsDrawer.add(new DrawerItem("rice", "Rice"));
-        mainIngredientsDrawer.add(new DrawerItem("cheece", "Cheece"));
+        String[] mainIngredientsArray = getResources().getStringArray(R.array.mainIngredientsArray);
 
         List<String> spMainIngredientList = new ArrayList<>();
+
+        mainIngredientsDrawer = new ArrayList<>();
         spMainIngredientList.add("Select");
-        for(DrawerItem item : mainIngredientsDrawer){
-            spMainIngredientList.add(item.getName());
+        for(String item : mainIngredientsArray){
+            mainIngredientsDrawer.add(new DrawerItem(item, item));
+
+            spMainIngredientList.add(item);
         }
 
         ArrayAdapter<String> mainIngredientAdapter = new ArrayAdapter<>(
