@@ -3,8 +3,6 @@
     <string name="recipes">Recipes</string>
     <string name="recipeDetails">Recipe Details</string>
 
-
-
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>
         <item>Turkey</item>
@@ -17,6 +15,19 @@
         <item>Fish</item>
         <item>Rice</item>
         <item>Cheece</item>
+    </string-array>
+
+    <string-array name="intolerancesArray">
+        <item>Dairy</item>
+        <item>Egg</item>
+        <item>Gluten</item>
+        <item>Peanut</item>
+        <item>Sesame</item>
+        <item>Seafood</item>
+        <item>Shellfish</item>
+        <item>Soy</item>
+        <item>Sulfite</item>
+        <item>Wheat</item>
     </string-array>
 
 </resources>

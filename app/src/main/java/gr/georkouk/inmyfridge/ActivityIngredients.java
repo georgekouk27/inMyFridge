@@ -164,8 +164,6 @@ public class ActivityIngredients extends AppCompatActivity {
 
                 List<Ingredient> ingredients = ingredientsRecAdapter.getSelectedIngredients();
 
-                ingredientsRecAdapter.resetSelection();
-
                 StringBuilder ingredientsStr = new StringBuilder();
 
                 for(Ingredient ingredient : ingredients){
@@ -226,6 +224,8 @@ public class ActivityIngredients extends AppCompatActivity {
 
                 intent.putExtra("minCalories", etMinCalories.getText().toString());
                 intent.putExtra("maxCalories", etMaxCalories.getText().toString());
+
+                clearSelections();
 
                 startActivity(intent);
             }
@@ -304,22 +304,14 @@ public class ActivityIngredients extends AppCompatActivity {
 
         spDiet.setAdapter(dietAdapter);
 
+        String[] intolerancesArray = getResources().getStringArray(R.array.intolerancesArray);
         intolerancesDrawer = new ArrayList<>();
-        intolerancesDrawer.add(new DrawerItem("tvDairy", "Dairy"));
-        intolerancesDrawer.add(new DrawerItem("tvEgg", "Egg"));
-        intolerancesDrawer.add(new DrawerItem("tvGluten", "Gluten"));
-        intolerancesDrawer.add(new DrawerItem("tvPeanut", "Peanut"));
-        intolerancesDrawer.add(new DrawerItem("tvSesame", "Sesame"));
-        intolerancesDrawer.add(new DrawerItem("tvSeafood", "Seafood"));
-        intolerancesDrawer.add(new DrawerItem("tvShellfish", "Shellfish"));
-        intolerancesDrawer.add(new DrawerItem("tvSoy", "Soy"));
-        intolerancesDrawer.add(new DrawerItem("tvSulfite", "Sulfite"));
-        intolerancesDrawer.add(new DrawerItem("tvWheat", "Wheat"));
+        for(String item : intolerancesArray){
+            intolerancesDrawer.add(new DrawerItem(item, item));
 
-        for(DrawerItem item : intolerancesDrawer){
             Switch switchItem = new Switch(this);
-            switchItem.setText(item.getName());
-            switchItem.setTag(item.getId());
+            switchItem.setText(item);
+            switchItem.setTag(item);
             switchItem.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -355,6 +347,23 @@ public class ActivityIngredients extends AppCompatActivity {
 
         spMealType.setAdapter(mealTypeAdapter);
 
+    }
+
+    private void clearSelections(){
+        ingredientsRecAdapter.resetSelection();
+
+        spMainIngredient.setSelection(0);
+        spCuisine.setSelection(0);
+        spDiet.setSelection(0);
+        spMealType.setSelection(0);
+
+        etMaxCalories.setText("");
+        etMinCalories.setText("");
+
+        for(DrawerItem item : intolerancesDrawer){
+            Switch switchItem = layoutIntolerances.findViewWithTag(item.getId());
+            switchItem.setChecked(false);
+        }
     }
 
 }
