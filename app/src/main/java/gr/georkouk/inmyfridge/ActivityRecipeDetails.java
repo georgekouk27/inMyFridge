@@ -1,7 +1,9 @@
 package gr.georkouk.inmyfridge;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+
+import java.io.IOException;
 import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,27 +150,20 @@ public class ActivityRecipeDetails extends AppCompatActivity {
             }
         });
 
-        Call<RecipeSummary> callSummary = interfaceApi.getRecipeSummary(id);
-
-        callSummary.enqueue(new Callback<RecipeSummary>() {
+        AsyncInterface asyncInterface = new AsyncInterface() {
             @Override
-            public void onResponse(@NonNull Call<RecipeSummary> call, @NonNull Response<RecipeSummary> response) {
-                if(response.body() != null) {
-                    tvRecipeSummary.setText(Html.fromHtml(response.body().getSummary()));
+            public void onAsyncFinished(String result) {
+                if(!result.equals("")) {
+                    tvRecipeSummary.setText(Html.fromHtml(result));
                     tvRecipeSummary.setVisibility(View.VISIBLE);
                 }
                 else{
                     tvRecipeSummary.setVisibility(View.GONE);
-                    Log.e(Constants.LOG_STRING, "Error loading recipe summary");
                 }
             }
+        };
 
-            @Override
-            public void onFailure(@NonNull Call<RecipeSummary> call, @NonNull Throwable t) {
-                Log.e(Constants.LOG_STRING, t.toString());
-            }
-        });
-
+        new GetRecipeSummary(asyncInterface).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
     }
 
     private boolean fillView(RecipeDetails recipe){
@@ -368,6 +365,59 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 "Error loading recipe details",
                 Toast.LENGTH_SHORT
         ).show();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class GetRecipeSummary extends AsyncTask<Integer, Integer, String> {
+
+        private AsyncInterface asyncInterface;
+
+        GetRecipeSummary(AsyncInterface asyncInterface){
+            this.asyncInterface = asyncInterface;
+        }
+
+        @Override
+        protected String doInBackground(Integer... data) {
+            InterfaceApi interfaceApi = RestClient.getClient().create(InterfaceApi.class);
+
+            String summary = "";
+            Call<RecipeSummary> call = interfaceApi.getRecipeSummary(data[0]);
+            try {
+                Response<RecipeSummary> response = call.execute();
+
+                if(response != null
+                        && response.body() != null) {
+
+                    summary = response.body().getSummary();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+
+                Log.e(Constants.LOG_STRING, "Error loading recipe summary");
+            }
+            catch (NullPointerException n){
+                n.printStackTrace();
+
+                Log.e(Constants.LOG_STRING, "Error loading recipe summary");
+            }
+
+            return summary;
+        }
+
+        @Override
+        protected void onPostExecute(String summary) {
+            if(this.asyncInterface != null){
+                this.asyncInterface.onAsyncFinished(summary);
+            }
+
+            super.onPostExecute(summary);
+        }
+
+    }
+
+    private interface AsyncInterface {
+        void onAsyncFinished(String result);
     }
 
 }
