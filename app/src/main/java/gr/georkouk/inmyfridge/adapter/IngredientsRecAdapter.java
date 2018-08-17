@@ -106,6 +106,37 @@ public class IngredientsRecAdapter extends RecyclerView.Adapter<IngredientsRecAd
         return selected;
     }
 
+    public String getSelectedIngredientsStr(){
+        StringBuilder selected = new StringBuilder();
+
+        for(Ingredient ingredient : ingredients){
+            if(ingredient.isSelected()){
+                selected.append(ingredient.getName()).append(",");
+            }
+        }
+
+        if(selected.length() > 1){
+            return selected.substring(0, selected.length() - 1);
+        }
+        else{
+            return "";
+        }
+    }
+
+    public void restoreSelections(String ingredientsStr){
+        String[] ingrStr = ingredientsStr.split(",");
+
+        for(String ingredientString : ingrStr){
+            for(Ingredient ingredient : ingredients){
+                if(ingredient.getName().equals(ingredientString)){
+                    ingredient.setSelected(true);
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder{
 
         private View view;

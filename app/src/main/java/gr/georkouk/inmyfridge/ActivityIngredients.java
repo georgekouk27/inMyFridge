@@ -3,6 +3,7 @@ package gr.georkouk.inmyfridge;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +36,17 @@ import gr.georkouk.inmyfridge.model.Ingredient;
 
 public class ActivityIngredients extends AppCompatActivity {
 
+    private static final String LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE";
+    private static final String ISROTATING = "isRotating";
+    private static final String MIN_CALORIES = "minCalories";
+    private static final String MAX_CALORIES = "maxCalories";
+    private static final String MAIN_INGREDIENTS_POS = "mainIngredientPos";
+    private static final String CUISINE_POS = "cuisinePos";
+    private static final String DIET_POS = "dietPos";
+    private static final String MEAL_TYPE_POS = "mealTypePos";
+    private static final String INTOLERANCES = "intolerances";
+    private static final String INGREDIENTS = "ingredients";
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.btSearchRecipes)
@@ -66,6 +78,7 @@ public class ActivityIngredients extends AppCompatActivity {
     private List<DrawerItem> dietDrawer;
     private List<DrawerItem> mealTypeDrawer;
     private List<DrawerItem> intolerancesDrawer;
+    private Parcelable layoutManagerState;
 
 
     @Override
@@ -73,17 +86,32 @@ public class ActivityIngredients extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        this.toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(this.toolbar);
 
         ButterKnife.bind(this);
         initializeView();
+
+        //check if user has rotated the screen to hide splashScreen and load selections
+        boolean isRotating = false;
+        String selectedIngredients = "";
+        if(savedInstanceState != null){
+            isRotating = savedInstanceState.getBoolean(ISROTATING, false);
+            selectedIngredients = savedInstanceState.getString(INGREDIENTS, "");
+
+            if(isRotating){
+                this.layoutProgress.setVisibility(View.GONE);
+                this.layoutIngredients.setVisibility(View.VISIBLE);
+            }
+        }
 
         final long tStart = System.currentTimeMillis();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ingredientsRef = database.getReference("ingredients");
 
+        final boolean finalIsRotating = isRotating;
+        final String finalSelectedIngredients = selectedIngredients;
         ingredientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -95,29 +123,33 @@ public class ActivityIngredients extends AppCompatActivity {
 
                 ingredientsRecAdapter.swapData(ingredientList);
 
-                long tEnd = System.currentTimeMillis();
-                long tDelta = tEnd - tStart;
-                double elapsedSeconds = tDelta / 1000.0;
+                restoreRecyclerViewState(finalSelectedIngredients);
 
-                if(elapsedSeconds < 3){
-                    long time = (long) ((3 - elapsedSeconds) * 1000);
+                if(!finalIsRotating) {
+                    long tEnd = System.currentTimeMillis();
+                    long tDelta = tEnd - tStart;
+                    double elapsedSeconds = tDelta / 1000.0;
 
-                    new CountDownTimer(time, 100) {
+                    if (elapsedSeconds < 3) {
+                        long time = (long) ((3 - elapsedSeconds) * 1000);
 
-                        public void onTick(long millisUntilFinished) {
+                        new CountDownTimer(time, 100) {
 
-                        }
+                            public void onTick(long millisUntilFinished) {
 
-                        public void onFinish() {
-                            layoutProgress.setVisibility(View.GONE);
-                            layoutIngredients.setVisibility(View.VISIBLE);
-                        }
+                            }
 
-                    }.start();
-                }
-                else {
-                    layoutProgress.setVisibility(View.GONE);
-                    layoutIngredients.setVisibility(View.VISIBLE);
+                            public void onFinish() {
+                                layoutProgress.setVisibility(View.GONE);
+                                layoutIngredients.setVisibility(View.VISIBLE);
+                            }
+
+                        }.start();
+                    }
+                    else {
+                        layoutProgress.setVisibility(View.GONE);
+                        layoutIngredients.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -130,9 +162,38 @@ public class ActivityIngredients extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(
+                LAYOUT_MANAGER_STATE,
+                this.recyclerView.getLayoutManager().onSaveInstanceState()
+        );
+
+        outState.putBoolean(ISROTATING, true);
+        outState.putString(MIN_CALORIES, this.etMinCalories.getText().toString());
+        outState.putString(MAX_CALORIES, this.etMaxCalories.getText().toString());
+        outState.putInt(MAIN_INGREDIENTS_POS, this.spMainIngredient.getSelectedItemPosition());
+        outState.putInt(CUISINE_POS, this.spCuisine.getSelectedItemPosition());
+        outState.putInt(DIET_POS, this.spDiet.getSelectedItemPosition());
+        outState.putInt(MEAL_TYPE_POS, this.spMealType.getSelectedItemPosition());
+        outState.putString(INTOLERANCES, getSelectedIntolerances());
+        outState.putString(INGREDIENTS, this.ingredientsRecAdapter.getSelectedIngredientsStr());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.layoutManagerState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE);
+
+        restoreFilters(savedInstanceState);
+    }
+
+    @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+            this.drawer.closeDrawer(GravityCompat.START);
         }
         else {
             super.onBackPressed();
@@ -142,13 +203,13 @@ public class ActivityIngredients extends AppCompatActivity {
     private void initializeView(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
-                drawer,
-                toolbar,
+                this.drawer,
+                this.toolbar,
                 R.string.app_name,
                 R.string.app_name
         );
 
-        drawer.addDrawerListener(toggle);
+        this.drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -162,27 +223,16 @@ public class ActivityIngredients extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityIngredients.this, ActivityRecipes.class);
 
-                List<Ingredient> ingredients = ingredientsRecAdapter.getSelectedIngredients();
-
-                StringBuilder ingredientsStr = new StringBuilder();
-
-                for(Ingredient ingredient : ingredients){
-                    ingredientsStr.append(ingredient.getName()).append(",");
-                }
+                String selectedIngredients = ingredientsRecAdapter.getSelectedIngredientsStr();
 
                 if(spMainIngredient.getSelectedItemPosition() > 0){
                     String mainIngredient =
                             mainIngredientsDrawer.get(spMainIngredient.getSelectedItemPosition() - 1).getName();
 
-                    ingredientsStr.append(mainIngredient).append(",");
+                    selectedIngredients += "," + mainIngredient;
                 }
 
-                if(ingredientsStr.length() > 1) {
-                    intent.putExtra("ingredients", ingredientsStr.substring(0, ingredientsStr.length() - 1));
-                }
-                else{
-                    intent.putExtra("ingredients", "");
-                }
+                intent.putExtra("ingredients", selectedIngredients);
 
                 String cuisine = "";
                 if(spCuisine.getSelectedItemPosition() > 0){
@@ -205,22 +255,7 @@ public class ActivityIngredients extends AppCompatActivity {
 
                 intent.putExtra("mealType", mealType);
 
-                StringBuilder intolerancesStr = new StringBuilder();
-
-                for(DrawerItem item : intolerancesDrawer){
-                    Switch switchItem = layoutIntolerances.findViewWithTag(item.getId());
-
-                    if(switchItem.isChecked()){
-                        intolerancesStr.append(item.getName()).append(",");
-                    }
-                }
-
-                if(intolerancesStr.length() > 1) {
-                    intent.putExtra("intolerances", intolerancesStr.substring(0, intolerancesStr.length() - 1));
-                }
-                else{
-                    intent.putExtra("intolerances", "");
-                }
+                intent.putExtra("intolerances", getSelectedIntolerances());
 
                 intent.putExtra("minCalories", etMinCalories.getText().toString());
                 intent.putExtra("maxCalories", etMaxCalories.getText().toString());
@@ -335,7 +370,7 @@ public class ActivityIngredients extends AppCompatActivity {
 
         List<String> spMealTypeList = new ArrayList<>();
         spMealTypeList.add("Select");
-        for(DrawerItem item : mealTypeDrawer){
+        for(DrawerItem item : this.mealTypeDrawer){
             spMealTypeList.add(item.getName());
         }
 
@@ -350,19 +385,66 @@ public class ActivityIngredients extends AppCompatActivity {
     }
 
     private void clearSelections(){
-        ingredientsRecAdapter.resetSelection();
+        this.ingredientsRecAdapter.resetSelection();
 
-        spMainIngredient.setSelection(0);
-        spCuisine.setSelection(0);
-        spDiet.setSelection(0);
-        spMealType.setSelection(0);
+        this.spMainIngredient.setSelection(0);
+        this.spCuisine.setSelection(0);
+        this.spDiet.setSelection(0);
+        this.spMealType.setSelection(0);
 
-        etMaxCalories.setText("");
-        etMinCalories.setText("");
+        this.etMaxCalories.setText("");
+        this.etMinCalories.setText("");
 
-        for(DrawerItem item : intolerancesDrawer){
-            Switch switchItem = layoutIntolerances.findViewWithTag(item.getId());
+        for(DrawerItem item : this.intolerancesDrawer){
+            Switch switchItem = this.layoutIntolerances.findViewWithTag(item.getId());
             switchItem.setChecked(false);
+        }
+    }
+
+    private void restoreRecyclerViewState(String selectedIngredients){
+        if (this.layoutManagerState != null) {
+            this.recyclerView.getLayoutManager().onRestoreInstanceState(this.layoutManagerState);
+        }
+
+        this.ingredientsRecAdapter.restoreSelections(selectedIngredients);
+    }
+
+    private String getSelectedIntolerances(){
+        StringBuilder intolerancesStr = new StringBuilder();
+
+        for(DrawerItem item : this.intolerancesDrawer){
+            Switch switchItem = this.layoutIntolerances.findViewWithTag(item.getId());
+
+            if(switchItem.isChecked()){
+                intolerancesStr.append(item.getName()).append(",");
+            }
+        }
+
+        if(intolerancesStr.length() > 1) {
+            return intolerancesStr.substring(0, intolerancesStr.length() - 1);
+        }
+        else{
+            return "";
+        }
+    }
+
+    private void restoreFilters(Bundle bundle){
+        this.etMinCalories.setText(bundle.getString(MIN_CALORIES, ""));
+        this.etMaxCalories.setText(bundle.getString(MAX_CALORIES, ""));
+
+        this.spMainIngredient.setSelection(bundle.getInt(MAIN_INGREDIENTS_POS, 0));
+        this.spCuisine.setSelection(bundle.getInt(CUISINE_POS, 0));
+        this.spDiet.setSelection(bundle.getInt(DIET_POS, 0));
+        this.spMealType.setSelection(bundle.getInt(MEAL_TYPE_POS, 0));
+
+        String intolerances = bundle.getString(INTOLERANCES, "");
+        String[] inolerancesStr = intolerances.split(",");
+        for(String intolerance : inolerancesStr){
+            Switch switchItem = layoutIntolerances.findViewWithTag(intolerance);
+
+            if(switchItem != null){
+                switchItem.setChecked(true);
+            }
         }
     }
 

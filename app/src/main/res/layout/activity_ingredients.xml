@@ -28,7 +28,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:background="?attr/colorPrimary"/>
+                    app:background="?attr/colorPrimary" />
 
             </android.support.design.widget.AppBarLayout>
 
@@ -106,10 +106,10 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:text="Initializing..."
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/progressBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -137,14 +137,14 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <LinearLayout
-    android:id="@+id/drawer"
-    android:layout_width="250dp"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:background="@color/white"
-    android:orientation="vertical">
+        android:id="@+id/drawer"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-    <include layout="@layout/search_options" />
+        <include layout="@layout/search_options" />
 
     </LinearLayout>
 
