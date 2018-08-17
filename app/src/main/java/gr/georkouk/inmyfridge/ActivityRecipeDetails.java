@@ -2,6 +2,7 @@ package gr.georkouk.inmyfridge;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,6 +74,7 @@ public class ActivityRecipeDetails extends AppCompatActivity {
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
     private int[] scrollPosition;
+    private RecipeDetails recipe;
 
 
     @Override
@@ -110,6 +114,38 @@ public class ActivityRecipeDetails extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.btShare) {
+            if(!recipe.getSpoonacularSourceUrl().equals("")) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                shareIntent.setType("text/plain");
+
+                shareIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        recipe.getSpoonacularSourceUrl());
+
+                startActivity(Intent.createChooser(shareIntent, "Share..."));
+            }
+            else{
+                Toast.makeText(
+                        this,
+                        "Recipe doesn't provide a url.",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeView(int id){
@@ -170,6 +206,8 @@ public class ActivityRecipeDetails extends AppCompatActivity {
         if(recipe == null){
             return false;
         }
+
+        this.recipe = recipe;
 
         layoutRoot.setVisibility(View.VISIBLE);
 

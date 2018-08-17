@@ -15,6 +15,9 @@ public class RecipeDetails {
     @SerializedName("image")
     private String imageUrl;
 
+    @SerializedName("spoonacularSourceUrl")
+    private String spoonacularSourceUrl;
+
     @SerializedName("preparationMinutes")
     private int preparationTime;
 
@@ -62,6 +65,14 @@ public class RecipeDetails {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getSpoonacularSourceUrl() {
+        return spoonacularSourceUrl;
+    }
+
+    public void setSpoonacularSourceUrl(String spoonacularSourceUrl) {
+        this.spoonacularSourceUrl = spoonacularSourceUrl;
     }
 
     public int getPreparationTime() {

@@ -27,6 +27,7 @@
     <string name="diet">DIET</string>
     <string name="mealType">MEAL TYPE</string>
     <string name="intolerances">INTOLERANCES</string>
+    <string name="share">Share</string>
 
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>
