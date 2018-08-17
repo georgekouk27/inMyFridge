@@ -3,6 +3,7 @@ package gr.georkouk.inmyfridge;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import gr.georkouk.inmyfridge.interfaces.InterfaceApi;
 import gr.georkouk.inmyfridge.model.Recipe;
 import gr.georkouk.inmyfridge.model.ResponseRecipes;
 import gr.georkouk.inmyfridge.network.RestClient;
+import gr.georkouk.inmyfridge.utils.Constants;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +30,7 @@ public class ActivityRecipes extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private RecipesRecAdapter recipesRecAdapter;
+    private Parcelable layoutManagerState;
 
 
     @Override
@@ -41,17 +44,34 @@ public class ActivityRecipes extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if(getIntent().getExtras() != null){
-            String ingredients = getIntent().getExtras().getString("ingredients", "");
-            String cuisine = getIntent().getExtras().getString("cuisine", "");
-            String diet = getIntent().getExtras().getString("diet", "");
-            String mealType = getIntent().getExtras().getString("mealType", "");
-            String intolerances = getIntent().getExtras().getString("intolerances", "");
-            String minCalories = getIntent().getExtras().getString("minCalories", "");
-            String maxCalories = getIntent().getExtras().getString("maxCalories", "");
+            String ingredients = getIntent().getExtras().getString(Constants.INGREDIENTS, "");
+            String cuisine = getIntent().getExtras().getString(Constants.CUISINE, "");
+            String diet = getIntent().getExtras().getString(Constants.DIET, "");
+            String mealType = getIntent().getExtras().getString(Constants.MEAL_TYPE, "");
+            String intolerances = getIntent().getExtras().getString(Constants.INTOLERANCES, "");
+            String minCalories = getIntent().getExtras().getString(Constants.MIN_CALORIES, "");
+            String maxCalories = getIntent().getExtras().getString(Constants.MAX_CALORIES, "");
 
             initializeView(ingredients, cuisine, diet, mealType, intolerances, minCalories, maxCalories);
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(
+                Constants.LAYOUT_MANAGER_STATE,
+                this.recyclerView.getLayoutManager().onSaveInstanceState()
+        );
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.layoutManagerState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
     }
 
     private void initializeView(String ingredients, String cuisine, String diet, String mealType,
@@ -118,6 +138,8 @@ public class ActivityRecipes extends AppCompatActivity {
                 }
 
                 recipesRecAdapter.swapData(response.body().getRecipes());
+
+                restoreRecyclerViewState();
             }
 
             @Override
@@ -127,6 +149,12 @@ public class ActivityRecipes extends AppCompatActivity {
                 Toast.makeText(ActivityRecipes.this, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void restoreRecyclerViewState(){
+        if (this.layoutManagerState != null) {
+            this.recyclerView.getLayoutManager().onRestoreInstanceState(this.layoutManagerState);
+        }
     }
 
 }

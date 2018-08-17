@@ -32,20 +32,10 @@ import butterknife.ButterKnife;
 import gr.georkouk.inmyfridge.adapter.IngredientsRecAdapter;
 import gr.georkouk.inmyfridge.model.DrawerItem;
 import gr.georkouk.inmyfridge.model.Ingredient;
+import gr.georkouk.inmyfridge.utils.Constants;
 
 
 public class ActivityIngredients extends AppCompatActivity {
-
-    private static final String LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE";
-    private static final String ISROTATING = "isRotating";
-    private static final String MIN_CALORIES = "minCalories";
-    private static final String MAX_CALORIES = "maxCalories";
-    private static final String MAIN_INGREDIENTS_POS = "mainIngredientPos";
-    private static final String CUISINE_POS = "cuisinePos";
-    private static final String DIET_POS = "dietPos";
-    private static final String MEAL_TYPE_POS = "mealTypePos";
-    private static final String INTOLERANCES = "intolerances";
-    private static final String INGREDIENTS = "ingredients";
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -96,8 +86,8 @@ public class ActivityIngredients extends AppCompatActivity {
         boolean isRotating = false;
         String selectedIngredients = "";
         if(savedInstanceState != null){
-            isRotating = savedInstanceState.getBoolean(ISROTATING, false);
-            selectedIngredients = savedInstanceState.getString(INGREDIENTS, "");
+            isRotating = savedInstanceState.getBoolean(Constants.ISROTATING, false);
+            selectedIngredients = savedInstanceState.getString(Constants.INGREDIENTS, "");
 
             if(isRotating){
                 this.layoutProgress.setVisibility(View.GONE);
@@ -164,19 +154,19 @@ public class ActivityIngredients extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(
-                LAYOUT_MANAGER_STATE,
+                Constants.LAYOUT_MANAGER_STATE,
                 this.recyclerView.getLayoutManager().onSaveInstanceState()
         );
 
-        outState.putBoolean(ISROTATING, true);
-        outState.putString(MIN_CALORIES, this.etMinCalories.getText().toString());
-        outState.putString(MAX_CALORIES, this.etMaxCalories.getText().toString());
-        outState.putInt(MAIN_INGREDIENTS_POS, this.spMainIngredient.getSelectedItemPosition());
-        outState.putInt(CUISINE_POS, this.spCuisine.getSelectedItemPosition());
-        outState.putInt(DIET_POS, this.spDiet.getSelectedItemPosition());
-        outState.putInt(MEAL_TYPE_POS, this.spMealType.getSelectedItemPosition());
-        outState.putString(INTOLERANCES, getSelectedIntolerances());
-        outState.putString(INGREDIENTS, this.ingredientsRecAdapter.getSelectedIngredientsStr());
+        outState.putBoolean(Constants.ISROTATING, true);
+        outState.putString(Constants.MIN_CALORIES, this.etMinCalories.getText().toString());
+        outState.putString(Constants.MAX_CALORIES, this.etMaxCalories.getText().toString());
+        outState.putInt(Constants.MAIN_INGREDIENTS_POS, this.spMainIngredient.getSelectedItemPosition());
+        outState.putInt(Constants.CUISINE_POS, this.spCuisine.getSelectedItemPosition());
+        outState.putInt(Constants.DIET_POS, this.spDiet.getSelectedItemPosition());
+        outState.putInt(Constants.MEAL_TYPE_POS, this.spMealType.getSelectedItemPosition());
+        outState.putString(Constants.INTOLERANCES, getSelectedIntolerances());
+        outState.putString(Constants.INGREDIENTS, this.ingredientsRecAdapter.getSelectedIngredientsStr());
 
         super.onSaveInstanceState(outState);
     }
@@ -185,7 +175,7 @@ public class ActivityIngredients extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        this.layoutManagerState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE);
+        this.layoutManagerState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
 
         restoreFilters(savedInstanceState);
     }
@@ -232,33 +222,33 @@ public class ActivityIngredients extends AppCompatActivity {
                     selectedIngredients += "," + mainIngredient;
                 }
 
-                intent.putExtra("ingredients", selectedIngredients);
+                intent.putExtra(Constants.INGREDIENTS, selectedIngredients);
 
                 String cuisine = "";
                 if(spCuisine.getSelectedItemPosition() > 0){
                     cuisine = cuisineDrawer.get(spCuisine.getSelectedItemPosition() - 1).getName();
                 }
 
-                intent.putExtra("cuisine", cuisine);
+                intent.putExtra(Constants.CUISINE, cuisine);
 
                 String dieet = "";
                 if(spDiet.getSelectedItemPosition() > 0){
                     dieet = dietDrawer.get(spDiet.getSelectedItemPosition() - 1).getName();
                 }
 
-                intent.putExtra("diet", dieet);
+                intent.putExtra(Constants.DIET, dieet);
 
                 String mealType = "";
                 if(spMealType.getSelectedItemPosition() > 0){
                     mealType = mealTypeDrawer.get(spMealType.getSelectedItemPosition() - 1).getName();
                 }
 
-                intent.putExtra("mealType", mealType);
+                intent.putExtra(Constants.MEAL_TYPE, mealType);
 
-                intent.putExtra("intolerances", getSelectedIntolerances());
+                intent.putExtra(Constants.INTOLERANCES, getSelectedIntolerances());
 
-                intent.putExtra("minCalories", etMinCalories.getText().toString());
-                intent.putExtra("maxCalories", etMaxCalories.getText().toString());
+                intent.putExtra(Constants.MIN_CALORIES, etMinCalories.getText().toString());
+                intent.putExtra(Constants.MAX_CALORIES, etMaxCalories.getText().toString());
 
                 clearSelections();
 
@@ -429,15 +419,15 @@ public class ActivityIngredients extends AppCompatActivity {
     }
 
     private void restoreFilters(Bundle bundle){
-        this.etMinCalories.setText(bundle.getString(MIN_CALORIES, ""));
-        this.etMaxCalories.setText(bundle.getString(MAX_CALORIES, ""));
+        this.etMinCalories.setText(bundle.getString(Constants.MIN_CALORIES, ""));
+        this.etMaxCalories.setText(bundle.getString(Constants.MAX_CALORIES, ""));
 
-        this.spMainIngredient.setSelection(bundle.getInt(MAIN_INGREDIENTS_POS, 0));
-        this.spCuisine.setSelection(bundle.getInt(CUISINE_POS, 0));
-        this.spDiet.setSelection(bundle.getInt(DIET_POS, 0));
-        this.spMealType.setSelection(bundle.getInt(MEAL_TYPE_POS, 0));
+        this.spMainIngredient.setSelection(bundle.getInt(Constants.MAIN_INGREDIENTS_POS, 0));
+        this.spCuisine.setSelection(bundle.getInt(Constants.CUISINE_POS, 0));
+        this.spDiet.setSelection(bundle.getInt(Constants.DIET_POS, 0));
+        this.spMealType.setSelection(bundle.getInt(Constants.MEAL_TYPE_POS, 0));
 
-        String intolerances = bundle.getString(INTOLERANCES, "");
+        String intolerances = bundle.getString(Constants.INTOLERANCES, "");
         String[] inolerancesStr = intolerances.split(",");
         for(String intolerance : inolerancesStr){
             Switch switchItem = layoutIntolerances.findViewWithTag(intolerance);
