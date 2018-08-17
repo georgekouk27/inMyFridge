@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import gr.georkouk.inmyfridge.adapter.IngredientsRecAdapter;
 import gr.georkouk.inmyfridge.model.DrawerItem;
 import gr.georkouk.inmyfridge.model.Ingredient;
+import gr.georkouk.inmyfridge.network.ConnectionManager;
 import gr.georkouk.inmyfridge.utils.Constants;
 
 
@@ -84,6 +85,8 @@ public class ActivityIngredients extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initializeView();
+
+        checkForInternetConnection();
 
         //check if user has rotated the screen to hide splashScreen and load selections
         boolean isRotating = false;
@@ -444,6 +447,16 @@ public class ActivityIngredients extends AppCompatActivity {
             if(switchItem != null){
                 switchItem.setChecked(true);
             }
+        }
+    }
+
+    private void checkForInternetConnection(){
+        if(!ConnectionManager.isConnected(this)){
+            Toast.makeText(
+                    this,
+                    "There is no internet connection.",
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 
