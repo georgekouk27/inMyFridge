@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import gr.georkouk.inmyfridge.model.RecipeDetails;
 import gr.georkouk.inmyfridge.model.RecipeSummary;
 import gr.georkouk.inmyfridge.model.Step;
 import gr.georkouk.inmyfridge.network.RestClient;
+import gr.georkouk.inmyfridge.utils.Constants;
 import gr.georkouk.inmyfridge.utils.ExpandableTextview;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +64,9 @@ public class ActivityRecipeDetails extends AppCompatActivity {
     ExpandableTextview tvRecipeSummary;
     @BindView(R.id.layoutRoot)
     LinearLayout layoutRoot;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+    private int[] scrollPosition;
 
 
     @Override
@@ -73,11 +79,33 @@ public class ActivityRecipeDetails extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        if(savedInstanceState != null) {
+            scrollPosition = savedInstanceState.getIntArray(Constants.NESTED_SCROLLVIEW_STATE);
+        }
+
         if(getIntent().getExtras() != null){
             int id = getIntent().getExtras().getInt("id", 0);
 
             initializeView(id);
         }
+        else{
+            finish();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putIntArray(
+                Constants.NESTED_SCROLLVIEW_STATE,
+                new int[]{ nestedScrollView.getScrollX(), nestedScrollView.getScrollY() }
+        );
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void initializeView(int id){
@@ -98,14 +126,23 @@ public class ActivityRecipeDetails extends AppCompatActivity {
             public void onResponse(@NonNull Call<RecipeDetails> call, @NonNull Response<RecipeDetails> response) {
                 progressDialog.dismiss();
 
-                fillView(response.body());
+                if(response.body() == null){
+                    showErrorLoadingMessage();
+
+                    finish();
+                }
+                else {
+                    fillView(response.body());
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<RecipeDetails> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
 
-                Toast.makeText(ActivityRecipeDetails.this, t.toString(), Toast.LENGTH_SHORT).show();
+                Log.e(Constants.LOG_STRING, t.toString());
+
+                showErrorLoadingMessage();
             }
         });
 
@@ -120,12 +157,13 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 }
                 else{
                     tvRecipeSummary.setVisibility(View.GONE);
+                    Log.e(Constants.LOG_STRING, "Error loading recipe summary");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<RecipeSummary> call, @NonNull Throwable t) {
-
+                Log.e(Constants.LOG_STRING, t.toString());
             }
         });
 
@@ -313,7 +351,23 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 String.valueOf(recipe.getNutrition().getCaloricBreakdown().getCarbsPercent())
         );
 
+        if (scrollPosition != null) {
+            nestedScrollView.post(new Runnable() {
+                public void run() {
+                    nestedScrollView.scrollTo(scrollPosition[0], scrollPosition[1]);
+                }
+            });
+        }
+
         return true;
+    }
+
+    private void showErrorLoadingMessage(){
+        Toast.makeText(
+                ActivityRecipeDetails.this,
+                "Error loading recipe details",
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
 }
