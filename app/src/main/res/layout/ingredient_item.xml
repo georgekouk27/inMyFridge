@@ -16,7 +16,7 @@
             android:id="@+id/ivIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:contentDescription=""
+            android:contentDescription="@string/ingredientImage"
             android:scaleType="fitXY" />
 
         <TextView

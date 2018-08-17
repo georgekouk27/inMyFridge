@@ -2,6 +2,31 @@
     <string name="app_name">In My Fridge</string>
     <string name="recipes">Recipes</string>
     <string name="recipeDetails">Recipe Details</string>
+    <string name="searchRecipes">Search Recipes</string>
+    <string name="initializing">Initializing…</string>
+    <string name="splashImage">Splash screen image</string>
+    <string name="servings">Servings</string>
+    <string name="prep">Prep</string>
+    <string name="total">Total</string>
+    <string name="recipeImage">Recipe image</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="nutritionInfo">Nutrition Information</string>
+    <string name="servingSize">Servings Size: 1 Serving</string>
+    <string name="dailyValue">% DV</string>
+    <string name="proteinPercent">% Protein</string>
+    <string name="fatPercent">% Fat</string>
+    <string name="carbsPercent">% Carbs</string>
+    <string name="ingredientImage">Ingredient Image</string>
+    <string name="missing">Missing</string>
+    <string name="extras">Extras</string>
+    <string name="minCalories">Min Calories</string>
+    <string name="maxCalories">Max Calories</string>
+    <string name="mainIngredient">MAIN INGREDIENT</string>
+    <string name="cuisine">CUISINE</string>
+    <string name="diet">DIET</string>
+    <string name="mealType">MEAL TYPE</string>
+    <string name="intolerances">INTOLERANCES</string>
 
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>

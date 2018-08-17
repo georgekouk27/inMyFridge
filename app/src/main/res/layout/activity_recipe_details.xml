@@ -48,7 +48,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -59,7 +60,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Servings"
+                        android:text="@string/servings"
                         android:gravity="center" />
 
                     <TextView
@@ -82,7 +83,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Prep"
+                        android:text="@string/prep"
                         android:gravity="center" />
 
                     <TextView
@@ -105,7 +106,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Total"
+                        android:text="@string/total"
                         android:gravity="center" />
 
                     <TextView
@@ -127,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_marginTop="4dp"
-                android:contentDescription=""
+                android:contentDescription="@string/recipeImage"
                 android:scaleType="centerCrop" />
 
             <gr.georkouk.inmyfridge.utils.ExpandableTextview
@@ -139,7 +140,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ingredients"
+                android:text="@string/ingredients"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorAccent"
@@ -157,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:layout_marginTop="8dp"
-                android:text="Steps"
+                android:text="@string/steps"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -173,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:layout_marginTop="8dp"
-                android:text="Nutrition Information"
+                android:text="@string/nutritionInfo"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -187,7 +188,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.85"
-                    android:text="Servings Size: 1 Serving"
+                    android:text="@string/servingSize"
                     android:textStyle="italic" />
 
                 <TextView
@@ -195,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.15"
                     android:gravity="center"
-                    android:text="% DV"
+                    android:text="@string/dailyValue"
                     android:textStyle="italic" />
 
             </LinearLayout>
@@ -236,7 +237,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="% Protein"
+                        android:text="@string/proteinPercent"
                         android:gravity="center" />
 
                     <TextView
@@ -257,7 +258,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="% Fat"
+                        android:text="@string/fatPercent"
                         android:gravity="center" />
 
                     <TextView
@@ -278,7 +279,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="% Carbs"
+                        android:text="@string/carbsPercent"
                         android:gravity="center" />
 
                     <TextView

@@ -67,7 +67,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:text="Search Recipes"
+                    android:text="@string/searchRecipes"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -106,7 +106,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:text="Initializing..."
+                    android:text="@string/initializing"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -128,7 +128,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/fridge" />
+                    app:srcCompat="@drawable/fridge"
+                    android:contentDescription="@string/splashImage" />
 
             </android.support.constraint.ConstraintLayout>
 

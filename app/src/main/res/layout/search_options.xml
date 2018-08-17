@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/food2"
-                android:contentDescription=""
+                android:contentDescription="@string/app_name"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -30,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:text="Extras"
+                android:text="@string/extras"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="#000000"
@@ -47,14 +48,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:text="Min Calories" />
+                android:text="@string/minCalories" />
 
             <EditText
                 android:id="@+id/etMinCalories"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                tools:ignore="LabelFor"/>
 
         </LinearLayout>
 
@@ -67,14 +69,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:text="Max Calories" />
+                android:text="@string/maxCalories" />
 
             <EditText
                 android:id="@+id/etMaxCalories"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                tools:ignore="LabelFor" />
 
         </LinearLayout>
 
@@ -83,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="MAIN INGREDIENT"
+            android:text="@string/mainIngredient"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -103,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="CUISINE"
+            android:text="@string/cuisine"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -123,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="DIET"
+            android:text="@string/diet"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -143,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="MEAL TYPE"
+            android:text="@string/mealType"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -163,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="INTOLERANCES"
+            android:text="@string/intolerances"
             android:textColor="#000000"
             android:textStyle="bold" />
 
