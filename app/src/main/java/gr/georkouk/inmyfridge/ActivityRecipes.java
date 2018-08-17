@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
@@ -132,7 +133,11 @@ public class ActivityRecipes extends AppCompatActivity {
                         || response.body().getRecipes() == null
                         || response.body().getRecipes().size() == 0){
 
-                    Toast.makeText(ActivityRecipes.this, "Recipes not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            ActivityRecipes.this,
+                            "Recipes not found",
+                            Toast.LENGTH_SHORT
+                    ).show();
 
                     finish();
                 }
@@ -146,7 +151,15 @@ public class ActivityRecipes extends AppCompatActivity {
             public void onFailure(@NonNull Call<ResponseRecipes> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
 
-                Toast.makeText(ActivityRecipes.this, t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        ActivityRecipes.this,
+                        "Problem occured",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                Log.e(Constants.LOG_STRING, t.toString());
+
+                finish();
             }
         });
     }
