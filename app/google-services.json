@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "819823474132",
+    "firebase_url": "https://inmyfridge-aed4a.firebaseio.com",
+    "project_id": "inmyfridge-aed4a",
+    "storage_bucket": "inmyfridge-aed4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819823474132:android:294f918f09e56495",
+        "android_client_info": {
+          "package_name": "gr.georkouk.inmyfridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819823474132-tcbee6pe6n7vde9s72ut5t0ufemvg3mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcF6fqXeAz8jevO7bJoHPWgko-NdWFsfU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

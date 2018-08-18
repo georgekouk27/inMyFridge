@@ -46,3 +46,4 @@ obj/
 *.ipr
 *~
 *.swp
+output.json
