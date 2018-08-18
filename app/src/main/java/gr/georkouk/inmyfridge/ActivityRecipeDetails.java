@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-
 import java.io.IOException;
 import java.util.Locale;
 import butterknife.BindView;
@@ -139,7 +138,7 @@ public class ActivityRecipeDetails extends AppCompatActivity {
             else{
                 Toast.makeText(
                         this,
-                        "Recipe doesn't provide a url.",
+                        getString(R.string.noRecipeUrl),
                         Toast.LENGTH_SHORT
                 ).show();
             }
@@ -152,8 +151,8 @@ public class ActivityRecipeDetails extends AppCompatActivity {
         layoutRoot.setVisibility(View.INVISIBLE);
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Food is coming....");
-        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage(getString(R.string.foodIsComing));
+        progressDialog.setTitle(getString(R.string.pleaseWait));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
@@ -232,6 +231,97 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 .apply(options)
                 .into(ivIcon);
 
+        showIngredients(recipe);
+
+        showInstructions(recipe);
+
+        showNutrients(recipe);
+
+        tvProteinPercent.setText(
+                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getProteinPercent())
+        );
+
+        tvFatPercent.setText(
+                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getFatPercent())
+        );
+
+        tvCarbsPercent.setText(
+                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getCarbsPercent())
+        );
+
+        if (scrollPosition != null) {
+            nestedScrollView.post(new Runnable() {
+                public void run() {
+                    nestedScrollView.scrollTo(scrollPosition[0], scrollPosition[1]);
+                }
+            });
+        }
+
+        return true;
+    }
+
+    private void showErrorLoadingMessage(){
+        Toast.makeText(
+                ActivityRecipeDetails.this,
+                getString(R.string.errorLoadingRecipe),
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class GetRecipeSummary extends AsyncTask<Integer, Integer, String> {
+
+        private AsyncInterface asyncInterface;
+
+        GetRecipeSummary(AsyncInterface asyncInterface){
+            this.asyncInterface = asyncInterface;
+        }
+
+        @Override
+        protected String doInBackground(Integer... data) {
+            InterfaceApi interfaceApi = RestClient.getClient().create(InterfaceApi.class);
+
+            String summary = "";
+            Call<RecipeSummary> call = interfaceApi.getRecipeSummary(data[0]);
+            try {
+                Response<RecipeSummary> response = call.execute();
+
+                if(response != null
+                        && response.body() != null) {
+
+                    summary = response.body().getSummary();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+
+                Log.e(Constants.LOG_STRING, getString(R.string.errorLoadingRecipeSummary));
+            }
+            catch (NullPointerException n){
+                n.printStackTrace();
+
+                Log.e(Constants.LOG_STRING, getString(R.string.errorLoadingRecipeSummary));
+            }
+
+            return summary;
+        }
+
+        @Override
+        protected void onPostExecute(String summary) {
+            if(this.asyncInterface != null){
+                this.asyncInterface.onAsyncFinished(summary);
+            }
+
+            super.onPostExecute(summary);
+        }
+
+    }
+
+    private interface AsyncInterface {
+        void onAsyncFinished(String result);
+    }
+
+    private void showIngredients(RecipeDetails recipe){
         for(ExtendedIngredient ingredient : recipe.getIngredients()){
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -281,7 +371,9 @@ public class ActivityRecipeDetails extends AppCompatActivity {
 
             layoutIngredients.addView(linearLayout);
         }
+    }
 
+    private void showInstructions(RecipeDetails recipe){
         if(recipe.getInstructions() != null && recipe.getInstructions().size() > 0) {
             for (Step step : recipe.getInstructions().get(0).getSteps()) {
                 LinearLayout linearLayout = new LinearLayout(this);
@@ -316,7 +408,9 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                 layoutSteps.addView(linearLayout);
             }
         }
+    }
 
+    private void showNutrients(RecipeDetails recipe){
         for(Nutrient nutrient : recipe.getNutrition().getNutrients()){
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -373,89 +467,6 @@ public class ActivityRecipeDetails extends AppCompatActivity {
 
             layoutNutrients.addView(linearLayout);
         }
-
-        tvProteinPercent.setText(
-                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getProteinPercent())
-        );
-
-        tvFatPercent.setText(
-                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getFatPercent())
-        );
-
-        tvCarbsPercent.setText(
-                String.valueOf(recipe.getNutrition().getCaloricBreakdown().getCarbsPercent())
-        );
-
-        if (scrollPosition != null) {
-            nestedScrollView.post(new Runnable() {
-                public void run() {
-                    nestedScrollView.scrollTo(scrollPosition[0], scrollPosition[1]);
-                }
-            });
-        }
-
-        return true;
-    }
-
-    private void showErrorLoadingMessage(){
-        Toast.makeText(
-                ActivityRecipeDetails.this,
-                "Error loading recipe details",
-                Toast.LENGTH_SHORT
-        ).show();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class GetRecipeSummary extends AsyncTask<Integer, Integer, String> {
-
-        private AsyncInterface asyncInterface;
-
-        GetRecipeSummary(AsyncInterface asyncInterface){
-            this.asyncInterface = asyncInterface;
-        }
-
-        @Override
-        protected String doInBackground(Integer... data) {
-            InterfaceApi interfaceApi = RestClient.getClient().create(InterfaceApi.class);
-
-            String summary = "";
-            Call<RecipeSummary> call = interfaceApi.getRecipeSummary(data[0]);
-            try {
-                Response<RecipeSummary> response = call.execute();
-
-                if(response != null
-                        && response.body() != null) {
-
-                    summary = response.body().getSummary();
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-
-                Log.e(Constants.LOG_STRING, "Error loading recipe summary");
-            }
-            catch (NullPointerException n){
-                n.printStackTrace();
-
-                Log.e(Constants.LOG_STRING, "Error loading recipe summary");
-            }
-
-            return summary;
-        }
-
-        @Override
-        protected void onPostExecute(String summary) {
-            if(this.asyncInterface != null){
-                this.asyncInterface.onAsyncFinished(summary);
-            }
-
-            super.onPostExecute(summary);
-        }
-
-    }
-
-    private interface AsyncInterface {
-        void onAsyncFinished(String result);
     }
 
 }

@@ -94,18 +94,6 @@ public class IngredientsRecAdapter extends RecyclerView.Adapter<IngredientsRecAd
         notifyDataSetChanged();
     }
 
-    public List<Ingredient> getSelectedIngredients(){
-        List<Ingredient> selected = new ArrayList<>();
-
-        for(Ingredient ingredient : ingredients){
-            if(ingredient.isSelected()){
-                selected.add(ingredient);
-            }
-        }
-
-        return selected;
-    }
-
     public String getSelectedIngredientsStr(){
         StringBuilder selected = new StringBuilder();
 

@@ -2,6 +2,7 @@ package gr.georkouk.inmyfridge.model;
 
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class ExtendedIngredient {
 
     @SerializedName("id")

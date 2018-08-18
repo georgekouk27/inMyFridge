@@ -28,6 +28,15 @@
     <string name="mealType">MEAL TYPE</string>
     <string name="intolerances">INTOLERANCES</string>
     <string name="share">Share</string>
+    <string name="problemOccured">Problem occurred</string>
+    <string name="select">Select</string>
+    <string name="noInternet">There is no internet connection.</string>
+    <string name="noRecipeUrl">Recipe doesn\'t provide a url.</string>
+    <string name="foodIsComing">Food is coming....</string>
+    <string name="pleaseWait">Please wait</string>
+    <string name="errorLoadingRecipe">Error loading recipe details</string>
+    <string name="errorLoadingRecipeSummary">Error loading recipe summary</string>
+    <string name="recipesNotFound">Recipes not found</string>
 
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>
@@ -54,6 +63,47 @@
         <item>Soy</item>
         <item>Sulfite</item>
         <item>Wheat</item>
+    </string-array>
+
+    <string-array name="cuisinesArray">
+        <item>Greek</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Vietnamese</item>
+        <item>Thai</item>
+        <item>Indian</item>
+        <item>British</item>
+        <item>French</item>
+        <item>Italian</item>
+        <item>Mexican</item>
+        <item>Spanish</item>
+        <item>American</item>
+        <item>German</item>
+    </string-array>
+
+    <string-array name="dietsArray">
+        <item>Pescetarian</item>
+        <item>Vegetarian</item>
+        <item>Lacto Vegetarian</item>
+        <item>Ovo Vegetarian</item>
+        <item>Vegan</item>
+        <item>Paleo</item>
+        <item>Primal</item>
+    </string-array>
+
+    <string-array name="mailTypesArray">
+        <item>Main course</item>
+        <item>Side dish</item>
+        <item>Dessert</item>
+        <item>Appetizer</item>
+        <item>Salad</item>
+        <item>Bread</item>
+        <item>Breakfast</item>
+        <item>Soup</item>
+        <item>Beverage</item>
+        <item>Sauce</item>
+        <item>Drink</item>
     </string-array>
 
 </resources>

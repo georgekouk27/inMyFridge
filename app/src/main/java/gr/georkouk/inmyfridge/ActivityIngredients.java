@@ -153,7 +153,7 @@ public class ActivityIngredients extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(
                         ActivityIngredients.this,
-                        "Problem occured",
+                        getString(R.string.problemOccured),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -223,167 +223,11 @@ public class ActivityIngredients extends AppCompatActivity {
         this.btSearchRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivityIngredients.this, ActivityRecipes.class);
-
-                String selectedIngredients = ingredientsRecAdapter.getSelectedIngredientsStr();
-
-                if(spMainIngredient.getSelectedItemPosition() > 0){
-                    String mainIngredient =
-                            mainIngredientsDrawer.get(spMainIngredient.getSelectedItemPosition() - 1).getName();
-
-                    selectedIngredients += "," + mainIngredient;
-                }
-
-                intent.putExtra(Constants.INGREDIENTS, selectedIngredients);
-
-                String cuisine = "";
-                if(spCuisine.getSelectedItemPosition() > 0){
-                    cuisine = cuisineDrawer.get(spCuisine.getSelectedItemPosition() - 1).getName();
-                }
-
-                intent.putExtra(Constants.CUISINE, cuisine);
-
-                String dieet = "";
-                if(spDiet.getSelectedItemPosition() > 0){
-                    dieet = dietDrawer.get(spDiet.getSelectedItemPosition() - 1).getName();
-                }
-
-                intent.putExtra(Constants.DIET, dieet);
-
-                String mealType = "";
-                if(spMealType.getSelectedItemPosition() > 0){
-                    mealType = mealTypeDrawer.get(spMealType.getSelectedItemPosition() - 1).getName();
-                }
-
-                intent.putExtra(Constants.MEAL_TYPE, mealType);
-
-                intent.putExtra(Constants.INTOLERANCES, getSelectedIntolerances());
-
-                intent.putExtra(Constants.MIN_CALORIES, etMinCalories.getText().toString());
-                intent.putExtra(Constants.MAX_CALORIES, etMaxCalories.getText().toString());
-
-                clearSelections();
-
-                startActivity(intent);
+                openSearchActivity();
             }
         });
 
-        String[] mainIngredientsArray = getResources().getStringArray(R.array.mainIngredientsArray);
-
-        List<String> spMainIngredientList = new ArrayList<>();
-
-        mainIngredientsDrawer = new ArrayList<>();
-        spMainIngredientList.add("Select");
-        for(String item : mainIngredientsArray){
-            mainIngredientsDrawer.add(new DrawerItem(item, item));
-
-            spMainIngredientList.add(item);
-        }
-
-        ArrayAdapter<String> mainIngredientAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                spMainIngredientList
-        );
-
-        spMainIngredient.setAdapter(mainIngredientAdapter);
-
-        cuisineDrawer = new ArrayList<>();
-        cuisineDrawer.add(new DrawerItem("greek", "Greek"));
-        cuisineDrawer.add(new DrawerItem("chinese", "Chinese"));
-        cuisineDrawer.add(new DrawerItem("japanese", "Japanese"));
-        cuisineDrawer.add(new DrawerItem("korean", "Korean"));
-        cuisineDrawer.add(new DrawerItem("vietnamese", "Vietnamese"));
-        cuisineDrawer.add(new DrawerItem("thai", "Thai"));
-        cuisineDrawer.add(new DrawerItem("indian", "Indian"));
-        cuisineDrawer.add(new DrawerItem("british", "British"));
-        cuisineDrawer.add(new DrawerItem("french", "French"));
-        cuisineDrawer.add(new DrawerItem("italian", "Italian"));
-        cuisineDrawer.add(new DrawerItem("mexican", "Mexican"));
-        cuisineDrawer.add(new DrawerItem("spanish", "Spanish"));
-        cuisineDrawer.add(new DrawerItem("american", "American"));
-        cuisineDrawer.add(new DrawerItem("german", "German"));
-
-        List<String> spCuisineList = new ArrayList<>();
-        spCuisineList.add("Select");
-        for(DrawerItem item : cuisineDrawer){
-            spCuisineList.add(item.getName());
-        }
-
-        ArrayAdapter<String> cuisineAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                spCuisineList
-        );
-
-        spCuisine.setAdapter(cuisineAdapter);
-
-        dietDrawer = new ArrayList<>();
-        dietDrawer.add(new DrawerItem("pescetarian", "Pescetarian"));
-        dietDrawer.add(new DrawerItem("vegetarian", "Vegetarian"));
-        dietDrawer.add(new DrawerItem("lactoVegetarian", "Lacto Vegetarian"));
-        dietDrawer.add(new DrawerItem("ovoVegetarian", "Ovo Vegetarian"));
-        dietDrawer.add(new DrawerItem("vegan", "Vegan"));
-        dietDrawer.add(new DrawerItem("paleo", "Paleo"));
-        dietDrawer.add(new DrawerItem("primal", "Primal"));
-
-        List<String> spDietList = new ArrayList<>();
-        spDietList.add("Select");
-        for(DrawerItem item : dietDrawer){
-            spDietList.add(item.getName());
-        }
-
-        ArrayAdapter<String> dietAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                spDietList
-        );
-
-        spDiet.setAdapter(dietAdapter);
-
-        String[] intolerancesArray = getResources().getStringArray(R.array.intolerancesArray);
-        intolerancesDrawer = new ArrayList<>();
-        for(String item : intolerancesArray){
-            intolerancesDrawer.add(new DrawerItem(item, item));
-
-            Switch switchItem = new Switch(this);
-            switchItem.setText(item);
-            switchItem.setTag(item);
-            switchItem.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            layoutIntolerances.addView(switchItem);
-        }
-
-        mealTypeDrawer = new ArrayList<>();
-        mealTypeDrawer.add(new DrawerItem("maincourse", "Main course"));
-        mealTypeDrawer.add(new DrawerItem("sidedish", "Side dish"));
-        mealTypeDrawer.add(new DrawerItem("dessert", "Dessert"));
-        mealTypeDrawer.add(new DrawerItem("appetizer", "Appetizer"));
-        mealTypeDrawer.add(new DrawerItem("salad", "Salad"));
-        mealTypeDrawer.add(new DrawerItem("bread", "Bread"));
-        mealTypeDrawer.add(new DrawerItem("breakfast", "Breakfast"));
-        mealTypeDrawer.add(new DrawerItem("soup", "Soup"));
-        mealTypeDrawer.add(new DrawerItem("beverage", "Beverage"));
-        mealTypeDrawer.add(new DrawerItem("sauce", "Sauce"));
-        mealTypeDrawer.add(new DrawerItem("drink", "Drink"));
-
-        List<String> spMealTypeList = new ArrayList<>();
-        spMealTypeList.add("Select");
-        for(DrawerItem item : this.mealTypeDrawer){
-            spMealTypeList.add(item.getName());
-        }
-
-        ArrayAdapter<String> mealTypeAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                spMealTypeList
-        );
-
-        spMealType.setAdapter(mealTypeAdapter);
-
+        loadFilters();
     }
 
     private void clearSelections(){
@@ -454,10 +298,147 @@ public class ActivityIngredients extends AppCompatActivity {
         if(!ConnectionManager.isConnected(this)){
             Toast.makeText(
                     this,
-                    "There is no internet connection.",
+                    getString(R.string.noInternet),
                     Toast.LENGTH_LONG
             ).show();
         }
+    }
+
+    private void loadFilters(){
+        String[] mainIngredientsArray = getResources().getStringArray(R.array.mainIngredientsArray);
+        mainIngredientsDrawer = new ArrayList<>();
+        List<String> spMainIngredientList = new ArrayList<>();
+        spMainIngredientList.add(getString(R.string.select));
+        for(String item : mainIngredientsArray){
+            mainIngredientsDrawer.add(new DrawerItem(item, item));
+
+            spMainIngredientList.add(item);
+        }
+
+        ArrayAdapter<String> mainIngredientAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                spMainIngredientList
+        );
+
+        spMainIngredient.setAdapter(mainIngredientAdapter);
+
+        String[] cuisinesArray = getResources().getStringArray(R.array.cuisinesArray);
+        cuisineDrawer = new ArrayList<>();
+        List<String> spCuisineList = new ArrayList<>();
+        spCuisineList.add(getString(R.string.select));
+        for(String item : cuisinesArray){
+            cuisineDrawer.add(new DrawerItem(item, item));
+
+            spCuisineList.add(item);
+        }
+
+        ArrayAdapter<String> cuisineAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                spCuisineList
+        );
+
+        spCuisine.setAdapter(cuisineAdapter);
+
+        String[] dietsArray = getResources().getStringArray(R.array.dietsArray);
+        dietDrawer = new ArrayList<>();
+
+        List<String> spDietList = new ArrayList<>();
+        spDietList.add(getString(R.string.select));
+        for(String item : dietsArray){
+            dietDrawer.add(new DrawerItem(item, item));
+
+            spDietList.add(item);
+        }
+
+        ArrayAdapter<String> dietAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                spDietList
+        );
+
+        spDiet.setAdapter(dietAdapter);
+
+        String[] intolerancesArray = getResources().getStringArray(R.array.intolerancesArray);
+        intolerancesDrawer = new ArrayList<>();
+        for(String item : intolerancesArray){
+            intolerancesDrawer.add(new DrawerItem(item, item));
+
+            Switch switchItem = new Switch(this);
+            switchItem.setText(item);
+            switchItem.setTag(item);
+            switchItem.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+
+            layoutIntolerances.addView(switchItem);
+        }
+
+        String[] mealTypesArray = getResources().getStringArray(R.array.mailTypesArray);
+        mealTypeDrawer = new ArrayList<>();
+
+        List<String> spMealTypeList = new ArrayList<>();
+        spMealTypeList.add(getString(R.string.select));
+        for(String item : mealTypesArray){
+            mealTypeDrawer.add(new DrawerItem(item, item));
+
+            spMealTypeList.add(item);
+        }
+
+        ArrayAdapter<String> mealTypeAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                spMealTypeList
+        );
+
+        spMealType.setAdapter(mealTypeAdapter);
+    }
+
+    private void openSearchActivity(){
+        Intent intent = new Intent(ActivityIngredients.this, ActivityRecipes.class);
+
+        String selectedIngredients = ingredientsRecAdapter.getSelectedIngredientsStr();
+
+        if(spMainIngredient.getSelectedItemPosition() > 0){
+            String mainIngredient =
+                    mainIngredientsDrawer.get(spMainIngredient.getSelectedItemPosition() - 1).getName();
+
+            selectedIngredients += "," + mainIngredient;
+        }
+
+        intent.putExtra(Constants.INGREDIENTS, selectedIngredients);
+
+        String cuisine = "";
+        if(spCuisine.getSelectedItemPosition() > 0){
+            cuisine = cuisineDrawer.get(spCuisine.getSelectedItemPosition() - 1).getName();
+        }
+
+        intent.putExtra(Constants.CUISINE, cuisine);
+
+        String dieet = "";
+        if(spDiet.getSelectedItemPosition() > 0){
+            dieet = dietDrawer.get(spDiet.getSelectedItemPosition() - 1).getName();
+        }
+
+        intent.putExtra(Constants.DIET, dieet);
+
+        String mealType = "";
+        if(spMealType.getSelectedItemPosition() > 0){
+            mealType = mealTypeDrawer.get(spMealType.getSelectedItemPosition() - 1).getName();
+        }
+
+        intent.putExtra(Constants.MEAL_TYPE, mealType);
+
+        intent.putExtra(Constants.INTOLERANCES, getSelectedIntolerances());
+
+        intent.putExtra(Constants.MIN_CALORIES, etMinCalories.getText().toString());
+        intent.putExtra(Constants.MAX_CALORIES, etMaxCalories.getText().toString());
+
+        clearSelections();
+
+        startActivity(intent);
     }
 
 }

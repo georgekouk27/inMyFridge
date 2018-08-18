@@ -4,13 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Nutrition {
 
     @SerializedName("nutrients")
-    List<Nutrient> nutrients;
+    private List<Nutrient> nutrients;
 
     @SerializedName("caloricBreakdown")
-    CaloricBreakdown caloricBreakdown;
+    private CaloricBreakdown caloricBreakdown;
 
     public Nutrition() {
     }

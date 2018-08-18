@@ -94,8 +94,8 @@ public class ActivityRecipes extends AppCompatActivity {
         this.recyclerView.setAdapter(this.recipesRecAdapter);
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Food is coming....");
-        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage(getString(R.string.foodIsComing));
+        progressDialog.setTitle(getString(R.string.pleaseWait));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
@@ -135,7 +135,7 @@ public class ActivityRecipes extends AppCompatActivity {
 
                     Toast.makeText(
                             ActivityRecipes.this,
-                            "Recipes not found",
+                            getString(R.string.recipesNotFound),
                             Toast.LENGTH_SHORT
                     ).show();
 
@@ -153,7 +153,7 @@ public class ActivityRecipes extends AppCompatActivity {
 
                 Toast.makeText(
                         ActivityRecipes.this,
-                        "Problem occured",
+                        getString(R.string.problemOccured),
                         Toast.LENGTH_SHORT
                 ).show();
 

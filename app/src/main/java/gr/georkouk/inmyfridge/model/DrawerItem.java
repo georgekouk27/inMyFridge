@@ -1,5 +1,6 @@
 package gr.georkouk.inmyfridge.model;
 
+@SuppressWarnings("unused")
 public class DrawerItem {
 
     private String id;
