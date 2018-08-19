@@ -1,5 +1,6 @@
 package gr.georkouk.inmyfridge;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -190,6 +192,8 @@ public class ActivityIngredients extends AppCompatActivity {
         this.layoutManagerState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
 
         restoreFilters(savedInstanceState);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
@@ -203,13 +207,27 @@ public class ActivityIngredients extends AppCompatActivity {
     }
 
     private void initializeView(){
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
                 this.drawer,
                 this.toolbar,
                 R.string.app_name,
                 R.string.app_name
-        );
+        ){
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
 
         this.drawer.addDrawerListener(toggle);
         toggle.syncState();

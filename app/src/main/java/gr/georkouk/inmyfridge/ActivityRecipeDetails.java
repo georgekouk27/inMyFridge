@@ -84,6 +84,10 @@ public class ActivityRecipeDetails extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.recipeDetails);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         ButterKnife.bind(this);
 
         if(savedInstanceState != null) {
@@ -142,6 +146,9 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                         Toast.LENGTH_SHORT
                 ).show();
             }
+        }
+        else if(item.getItemId() == android.R.id.home){
+            onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);

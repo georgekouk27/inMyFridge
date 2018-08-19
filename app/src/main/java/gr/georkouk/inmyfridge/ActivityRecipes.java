@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,10 @@ public class ActivityRecipes extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.recipes);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         ButterKnife.bind(this);
 
         if(getIntent().getExtras() != null){
@@ -73,6 +78,16 @@ public class ActivityRecipes extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         this.layoutManagerState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeView(String ingredients, String cuisine, String diet, String mealType,
