@@ -12,8 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import gr.georkouk.inmyfridge.adapter.RecipesRecAdapter;
@@ -31,6 +38,10 @@ public class ActivityRecipes extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.adView)
+    AdView adView;
+    @BindString(R.string.appID)
+    String appID;
     private RecipesRecAdapter recipesRecAdapter;
     private Parcelable layoutManagerState;
 
@@ -59,6 +70,10 @@ public class ActivityRecipes extends AppCompatActivity {
             String maxCalories = getIntent().getExtras().getString(Constants.MAX_CALORIES, "");
 
             initializeView(ingredients, cuisine, diet, mealType, intolerances, minCalories, maxCalories);
+
+            MobileAds.initialize(this, appID);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
         }
 
     }

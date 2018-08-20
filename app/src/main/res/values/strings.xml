@@ -39,6 +39,8 @@
     <string name="recipesNotFound">Recipes not found</string>
     <string name="min">min</string>
     <string name="share1">Share…</string>
+    <string name="appID">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="addUnitID">ca-app-pub-3940256099942544/6300978111</string>
 
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>
