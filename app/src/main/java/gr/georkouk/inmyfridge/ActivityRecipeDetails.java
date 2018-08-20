@@ -137,7 +137,7 @@ public class ActivityRecipeDetails extends AppCompatActivity {
                         Intent.EXTRA_TEXT,
                         recipe.getSpoonacularSourceUrl());
 
-                startActivity(Intent.createChooser(shareIntent, "Share..."));
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share1)));
             }
             else{
                 Toast.makeText(
@@ -220,10 +220,10 @@ public class ActivityRecipeDetails extends AppCompatActivity {
         tvRecipeName.setText(recipe.getTitle());
         tvServings.setText(String.valueOf(recipe.getServings()));
 
-        String prep = recipe.getPreparationTime() + " min";
+        String prep = recipe.getPreparationTime() + " " + getString(R.string.min);
         tvPreparationTime.setText(prep);
 
-        String total = recipe.getReadyInTime() + " min";
+        String total = recipe.getReadyInTime() + " " + getString(R.string.min);
         tvTotalTime.setText(total);
 
         RequestOptions options = new RequestOptions()

@@ -37,6 +37,8 @@
     <string name="errorLoadingRecipe">Error loading recipe details</string>
     <string name="errorLoadingRecipeSummary">Error loading recipe summary</string>
     <string name="recipesNotFound">Recipes not found</string>
+    <string name="min">min</string>
+    <string name="share1">Share…</string>
 
     <string-array name="mainIngredientsArray">
         <item>Chicken</item>
