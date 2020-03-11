@@ -25,19 +25,19 @@ Also, to build and release the app you should provide KEY_ALIAS, KEY_PASSWORD, S
 
 ## Screens
 
-![screen](../master/screens/screen1.png)
+<img src="/screens/screen1.png" width="500"
 
-![screen](../master/screens/screen2.png)
+<img src="/screens/screen2.png" width="500">
 
-![screen](../master/screens/screen3.png)
+<img src="/screens/screen3.png" width="500">
 
-![screen](../master/screens/screen4.png)
+<img src="/screens/screen4.png" width="500">
 
-![screen](../master/screens/screen5.png)
+<img src="/screens/screen5.png" width="500">
 
-![screen](../master/screens/screen6.png)
+<img src="/screens/screen6.png" width="500">
 
-![screen](../master/screens/screen7.png)
+<img src="/screens/screen7.png" width="500">
 
 ## Libraries
 
